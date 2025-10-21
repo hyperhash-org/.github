@@ -1,8 +1,0 @@
-name: release
-on:
-  workflow_call:
-jobs:
-  rel:
-    uses: ./.github/workflows/rust-build.yml
-    with:
-      run-tests: true

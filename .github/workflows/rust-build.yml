@@ -1,0 +1,27 @@
+name: rust-build
+on:
+  workflow_call:
+    inputs:
+      run-tests:
+        type: boolean
+        default: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build
+        run: cargo build --release --locked
+      - name: Test
+        if: inputs.run-tests == true
+        run: cargo test --release --locked
